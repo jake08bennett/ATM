@@ -1,18 +1,44 @@
 class Account
 
-	attr_accessor :name, :money, :pin
+	attr_accessor :name, :balance, :pin
 
-	def initialize(name, money, pin)
+	def initialize(name, balance, pin)
 		@name = name
-		@money = money.to_i
-		@pin = pin
+		@balance = balance.to_i
+		@pin = pin.to_i
 	end
 
-	def withdraw_value(amountW)
-		@money -= amountW.to_i
+
+	def withdraw(pin)
+		if pin == @pin
+			puts "How much do you want like to withdraw?"
+			value = gets.to_i
+			if (@balance - value ) >= 0
+				puts "You have withdrawn $" + value.to_s
+				@balance -= value
+				puts "Remaining balance is $" + @balance.to_s
+			else
+				puts "The user does not have enough money."
+			end
+		else
+			puts "The PIN is incorrect."
+		end
 	end
 
-	def deposit_value(amountD)
-		@money += amountD.to_i
+	def deposit(pin)
+		if pin == @pin
+			puts "How much do you want to deposit?"
+			value = gets.to_i
+			puts "Depositing $" + value.to_s
+			@balance += value
+			puts "You now have $" + @balance.to_s
+		else
+			puts "The PIN is incorrect."
+		end
 	end
+
+	def balance
+		puts "You have $" + @balance.to_s
+	end
+
 end

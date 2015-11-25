@@ -1,69 +1,43 @@
-require_relative "account"
-
 class Atm
 
-	attr_accessor :accounts, :current_user
+	attr_accessor :name, :money, :pin
 
-	def initialize(accounts)
-		@accounts = users
+	def initialize(name, money, pin)
+		@name = name
+		@money = money.to_i
+		@pin = pin.to_i
 	end
 
-	def users
-		file = File.open("user.csv", "r")
-		users = []
-		count = 0
-		
-		file.each_line do |line|
-			a = line.split(',')
-			users[count] = Account.new(a[0], a[1], a[2])
-			count += 1
-		end
-	end
-
-	def start
-		puts "What is your personal pin? \n"
-		pin1 = gets
-
-		for i in 1..users.length
-			if pin1 == users[i-1].pin
-				puts "\nWelcome " + users[i-1].name 
-				puts "In your account you have $" + users[i-1].money.to_s
-				puts "\n"
-				current_user = users[i-1]
+	def withdraw(pin)
+		if pin == @pin
+			puts "How Much Money Would You Like to Withdraw?"
+			amount = gets.to_i
+			if (@money - amount) >= 0
+				puts "You are Withdrawing $" + amount.to_s
+				@money -= amount
+				puts "You Currently Have $" + @money.to_s
+			else
+				puts "This User Does Not Have Enough Money."
 			end
-		end
-
-		puts "Whats operation would you like to perform? \n (Pick the number related to your request) \n 1:Deposit \n 2:Withdraw \n 3:Exit "
-		request = gets.to_i
-
-		if request == 1
-			deposit
-		elsif request == 2
-			withdraw
-		elsif request == 3
-			puts "goodbye"
-			exit
 		else
-			puts "not a valid option, goodbye"
-			exit
-		end 
-
-
-		def withdraw
-			puts "How much would you like to withdraw?"
-			amountW = gets
-			puts "withdraw $" + amountW.to_s
-			current_user.withdraw_value(amountW)
+			puts "The PIN is Incorrect."
 		end
+	end
 
-		def deposit
-			puts "How much would you like to deposit?"
-			amountD = gets
-			puts "Deposit $" + amountD.to_s
-			current_user.deposit_value(amountD)
+	def deposit(pin)
+		if pin == @pin
+			puts "How Much Money Would You Like to Deposit?"
+			amount = gets.to_i
+			puts "You are Depositing $" + amount.to_s
+			@money += amount
+			puts "You Currently Have $" + @money.to_s
+		else
+			puts "The PIN is Incorrect."
 		end
+	end
+
+	def balance
+		puts "You Have a Balance of $" + @money.to_s
 	end
 
 end
-
-atm = Atm.new()
